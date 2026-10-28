@@ -1,8 +1,8 @@
-# Matched three-head embedding checks (MWE)
+﻿# Matched three-head embedding checks (MWE)
 
 This repository contains the algorithms and materials used in the illustrative experiments described in ***Deep Metric Learning Beyond Euclidean Space: A Practical Guide to Riemannian Embedding Geometries***, submitted to *Acta Polytechnica Hungarica*.
 
-The check trains the **same** encoder and supervised InfoNCE loss under three embedding heads — Euclidean, spherical (\(\ell_2\) + cosine), Poincaré — and reports pre-registered diagnostics. It is an **illustrative** stress test of ranking disagreement and hierarchy–geometry interaction under matched slots. It is **not** a benchmark or SOTA comparison.
+The check trains the **same** encoder and supervised InfoNCE loss under three embedding heads — Euclidean, spherical ($\ell_2$ + cosine), Poincaré — and reports pre-registered diagnostics. It is an **illustrative** stress test of ranking disagreement and hierarchy–geometry interaction under matched slots. It is **not** a benchmark or SOTA comparison.
 
 Code / formula provenance (kudos to the authors and maintainers):
 
@@ -17,7 +17,7 @@ Code / formula provenance (kudos to the authors and maintainers):
 Only the geometry map and the distance inside the loss change between heads. Shared across heads:
 
 - encoder architecture and initialization seed family
-- temperature \(\tau = 0.1\)
+- temperature $\tau = 0.1$
 - Adam, learning rate, epoch budget
 - batch construction (`MPerClassSampler`)
 - no data augmentation (ToTensor + normalize only)
@@ -28,25 +28,25 @@ Only the geometry map and the distance inside the loss change between heads. Sha
 | --- | --- | --- |
 | `synthetic` | Hierarchical (H) vs flat (F) Gaussian class means, 27 leaves | P1 + P0 + gated P2 |
 | `cifar10` | CIFAR-10 (quick subset by default; `--full` = 50k train) | P1 + Recall@1 by head |
-| `omniglot` | Matched H/F arms (quick: \(3\times 9=27\) classes; `--full`: \(5\times 9=45\) classes using background+evaluation alphabets) | P1 + P0 + gated P2 |
+| `omniglot` | Matched H/F arms (quick: $3\times 9=27$ classes; `--full`: $5\times 9=45$ classes using background+evaluation alphabets) | P1 + P0 + gated P2 |
 
 ### Predictions / gates
 
-- **P1 (ranking):** On ambient features of the *spherical* head, Spearman correlation of pairwise cosine vs spherical geodesic \(\arccos\) is higher than cosine vs Poincaré distance (threshold: gap \(> 0.05\)).
-- **P0 (hierarchy-in-embedding, validity gate):** On the spherical head of regime **H**, `parent_hit@5_excl_leaf` (fraction of top-5 *other-leaf* neighbors that share the parent) must beat chance by \(+0.15\). Same-leaf neighbors are masked so leaf Recall@1 cannot inflate the score. Parents: synthetic = immediate tree parent; Omniglot = alphabet.
-- **P2 (structure × geometry):** \(\Delta = (\mathrm{Hyp}-\mathrm{Sph})_{\mathrm{H}} - (\mathrm{Hyp}-\mathrm{Sph})_{\mathrm{F}}\) on Recall@1 (threshold: \(> 0.02\)). Absolute hyperbolic superiority is **not** claimed.
+- **P1 (ranking):** On ambient features of the *spherical* head, Spearman correlation of pairwise cosine vs spherical geodesic $\arccos$ is higher than cosine vs Poincaré distance (threshold: gap $> 0.05$).
+- **P0 (hierarchy-in-embedding, validity gate):** On the spherical head of regime **H**, `parent_hit@5_excl_leaf` (fraction of top-5 *other-leaf* neighbors that share the parent) must beat chance by $+0.15$. Same-leaf neighbors are masked so leaf Recall@1 cannot inflate the score. Parents: synthetic = immediate tree parent; Omniglot = alphabet.
+- **P2 (structure × geometry):** $\Delta = (\mathrm{Hyp}-\mathrm{Sph})_{\mathrm{H}} - (\mathrm{Hyp}-\mathrm{Sph})_{\mathrm{F}}$ on Recall@1 (threshold: $> 0.02$). Absolute hyperbolic superiority is **not** claimed.
 
 `summary.p2_status` is one of:
 
 | Status | Meaning |
 | --- | --- |
-| `hold` / `fail` | P0 passed and Poincaré not near-boundary → interpret \(\Delta\) |
+| `hold` / `fail` | P0 passed and Poincaré not near-boundary → interpret $\Delta$ |
 | `not_applicable` | P0 failed (no usable hierarchy in embeddings) → do not treat P2 as a geometry test |
-| `weak_geometry` | Poincaré radius warning (`hyp_frac_near_boundary` \(> 0.5\)) → numeric health first |
+| `weak_geometry` | Poincaré radius warning (`hyp_frac_near_boundary` $> 0.5$) → numeric health first |
 
 Multi-seed `aggregate.json` reports `p0_hold_rate`, `p2_status_counts`, and `p2_hold_rate` = hold rate among *interpretable* seeds only (`hold`/`fail`).
 
-Omniglot images are resized to \(28\times 28\) in this repo (implementation choice; not a claim about the official release size). Omniglot `--full` enlarges the arms; epoch count stays matched to quick (20).
+Omniglot images are resized to $28\times 28$ in this repo (implementation choice; not a claim about the official release size). Omniglot `--full` enlarges the arms; epoch count stays matched to quick (20).
 
 ## Setup
 
@@ -126,7 +126,7 @@ manuscript_summary.py  # read-only aggregation over results/**/seed_*/metrics.js
 python manuscript_summary.py --out ../manuscript/latex/figures/mwe
 ```
 
-Writes `mwe_summary.json` (per-regime, per-head Recall@1 mean/std; rank-correlation gaps; P0 hits; \(\Delta\); status counts; near-boundary fractions), `fig_mwe_rank.png`, `fig_mwe_recall.png` and `table_body.tex`. It does not retrain or recompute metrics.
+Writes `mwe_summary.json` (per-regime, per-head Recall@1 mean/std; rank-correlation gaps; P0 hits; $\Delta$; status counts; near-boundary fractions), `fig_mwe_rank.png`, `fig_mwe_recall.png` and `table_body.tex`. It does not retrain or recompute metrics.
 
 # References
 
